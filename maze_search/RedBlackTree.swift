@@ -29,11 +29,117 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     }
     
     func insert(data: T) -> Bool {
-        if insert(data: data, node: root, parent: nil) == nil {
-            return true
+        return insert(data: data, node: root, parent: nil, grandparent: nil)
+    }
+    
+    private func insert(data: T, node nodeOp: Node<T>?, parent parentOp: Node<T>?, grandparent grandparentOp: Node<T>?) -> Bool {
+        // If we have to keep going down the tree (i.e., if there is a node)
+        if let node = nodeOp {
+            if data < node.data {
+                return insert(data: data, node: node.left, parent: node, grandparent: parentOp)
+            }
+            else {
+                return insert(data: data, node: node.right, parent: node, grandparent: parentOp)
+            }
         }
         else {
-            return false
+            let newNode: Node<T>
+            
+            // If we have have to add a node and it is NOT the root (i.e., if there is no node, but there is a parent)
+            if let parent = parentOp {
+                newNode = Node<T>(data: data)
+                
+                if data < parent.data {
+                    parent.left = newNode
+                }
+                else {
+                    parent.right = newNode
+                }
+                
+                newNode.parent = parent
+            }
+                // Add data as the root (i.e., if there is no node or a parent node)
+            else {
+                newNode = Node<T>(data: data)
+                root = newNode
+            }
+            
+            numNodes += 1
+            insertCase1(newNode)
+            return true
+        }
+    }
+    
+    private func insertCase1(_ node: Node<T>) {
+        if node.parent == nil {
+            node.color = .Black
+        }
+        else {
+            insertCase2(node)
+        }
+    }
+    
+    // *** We have already determined that node has a parent
+    private func insertCase2(_ node: Node<T>) {
+        if node.parent!.color == .Black {
+            return // Tree is still valid
+        }
+        else {
+            insertCase3(node)
+        }
+    }
+    
+    // *** We have already determined that node has a parent
+    private func insertCase3(_ node: Node<T>) {
+        let uncleOp = uncle(ofNode: node)
+        
+        // If unc exists AND its color is Red
+        if uncleOp?.color == .Red {
+            let unc = uncleOp!
+            let gp = grandparent(ofNode: node)! // if there is an uncle, then there is a grandparent
+            
+            node.parent!.color = .Black
+            unc.color = .Black
+            gp.color = .Red
+            insertCase1(gp)
+        }
+        else {
+            insertCase4(node)
+        }
+        
+    }
+    
+    // *** We have already determined that node has a parent
+    // *** There must be a grandparent at this stage
+    private func insertCase4(_ node: Node<T>) {
+        var node = node // makes node a variable, not a constant
+        let gp = grandparent(ofNode: node)! // There must be a grandparent if we have gotten to this stage
+        
+        if (node == node.parent!.right) && (node.parent == gp.left) {
+            rotateLeft(node.parent!)
+            node = node.left!
+        }
+        else if (node == node.parent!.left) && (node.parent == gp.right) {
+            rotateRight(node.parent!)
+            node = node.right!
+        }
+        
+        insertCase5(node)
+    }
+    
+    // *** We have already determined that node has a parent
+    // *** There must be a grandparent at this stage
+    private func insertCase5(_ node: Node<T>) {
+        let gp = grandparent(ofNode: node)! // There must be a grandparent if we have gotten to this stage
+        
+        node.parent!.color = .Black
+        gp.color = .Red
+        
+        if node == node.parent!.left {
+            rotateRight(gp)
+        }
+        else {
+            rotateLeft(gp)
         }
     }
     
@@ -152,7 +258,7 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
         }
     }
     
-    private func uncle(node: Node<T>) -> Node<T>? {
+    private func uncle(ofNode node: Node<T>) -> Node<T>? {
         if let parent = node.parent {
             if let grandparent = parent.parent {
                 if let grandparentLeft = grandparent.left {
@@ -162,6 +268,16 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
                 }
                 
                 return grandparent.right!
+            }
+        }
+        
+        return nil
+    }
+    
+    private func grandparent(ofNode node: Node<T>) -> Node<T>? {
+        if let parent = node.parent {
+            if let grandparent = parent.parent {
+                return grandparent
             }
         }
         
@@ -201,7 +317,7 @@ private enum RBT_Color : CustomStringConvertible {
 
 
 
-private class Node<T: Comparable> : CustomStringConvertible {
+private class Node<T: Comparable> : CustomStringConvertible, Equatable {
     var parent: Node<T>? = nil
     var left: Node<T>? = nil
     var right: Node<T>? = nil
@@ -217,5 +333,9 @@ private class Node<T: Comparable> : CustomStringConvertible {
     
     init(data: T) {
         self.data = data
+    }
+    
+    public static func ==(lhs: Node<T>, rhs: Node<T>) -> Bool {
+        return lhs.data == rhs.data
     }
 }
