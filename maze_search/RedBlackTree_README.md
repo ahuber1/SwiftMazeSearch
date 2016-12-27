@@ -54,7 +54,7 @@ void insert_case1(struct node *n)
 }
 ```
 ### Case 2
-** Precondition(s): `N` is red, `N` has a parent **
+**Precondition(s): `N` is red, `N` has a parent.**
 
 In this case, the current node's parent `P` is black.
 
@@ -75,7 +75,7 @@ void insert_case2(struct node *n)
 ```
 
 ### Case 3
-** Precondition(s): `N` is red, `P` is red **
+**Precondition(s): `N` is red, `P` is red.**
 
 Because of **Case 1**, we have determined that `N` is _not_ the root of the tree, and because of **Case 2**, we have determined that `P` is red. In this case, we have to see if there is an uncle of `N`; this uncle is called `U`.
 
@@ -108,7 +108,7 @@ void insert_case3(struct node *n)
 ![The image of Insertion Case 3 no longer exists on Wikipedia][img:insert3]
 
 ### Case 4
-** Precondition(s): `N` is red, `P` is red, `U` either does not exist or is black **
+**Precondition(s): `N` is red, `P` is red, `U` either does not exist or is black.**
 
 During the following scenario, we perform a left rotation on the current node's parent `P` that switches the role of the current node `N` and its parent `P` _so long as `P` is the left child of its parent `G`_. If `P` is the _right_ child of `G`, then a _right_ rotation is performed.
 
@@ -161,7 +161,7 @@ void insert_case4(struct node *n)
 ![The image of Insertion Case 4 no longer exists on Wikipedia][img:insert4]
 
 ### Case 5
-** Precondition(s): `N` is red, `P` is red, `U` either does not exist or is black, `G` is black since its former child `P` could not have been red otherwise without violating Property 4. **
+**Precondition(s): `N` is red, `P` is red, `U` either does not exist or is black, `G` is black since its former child `P` could not have been red otherwise without violating Property 4.**
 
 During the following scenario, the colors of the current node's parent and grandparent, `P` and `G`, are switched (i.e., repainted black and red, respectively) so that Property 4 is satisfied. Then, a right rotation on `G` is performed, resulting in a tree where the former parent `P` is now the parent of both the current node `N` and the former grandparent `G` so long as `N` is the left child of `P`. If `N` is the right child of `P`, a _left_ rotation is performed instead.
 
