@@ -21,13 +21,13 @@ while rbt.numberOfNodes < numNodes {
     if rbt.insert(num) {
         print("Inserted \(num)\t\(rbt.numberOfNodes)/\(numNodes) inserted.")
     }
+    
+    var nodeCount: UInt = 0
+    rbt.traverse(onNodeTouched: { _ in nodeCount += 1 } )
+    assert(nodeCount == rbt.numberOfNodes)
 }
 
-var nodeCount: UInt = 0
-rbt.traverse(onNodeTouched: { _ in nodeCount += 1 } )
-assert(nodeCount == rbt.numberOfNodes)
-
-while rbt.numberOfNodes > numNodes / 2 {
+while rbt.numberOfNodes > 0 {
     if let removedNumber = rbt.remove(randomIntBetween(min: 0, max: numNodes)) {
         var nodeCount: UInt = 0
         rbt.traverse(onNodeTouched: { _ in nodeCount += 1 } )
