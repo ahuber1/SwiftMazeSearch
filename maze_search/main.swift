@@ -13,23 +13,25 @@ func randomIntBetween(min: UInt, max: UInt) -> UInt {
     return UInt(arc4random_uniform(UInt32(UInt(max - min + 1)))) + min
 }
 
-let list = LinkedList<Int>()
-let min = 1
-let max = 100000
+let rbt = RedBlackTree<UInt>(traversalType: .InOrder)
+let numNodes: UInt = UInt(pow(Double(2), Double(10)))
 
-for i in min...max {
-    list.addToHead(i)
-    print("Added \(i) to the list and it " + (list.contains(i) ? "contains" : "does NOT contain") + " \(i) in the list.")
+while rbt.numberOfNodes < numNodes {
+    let num = randomIntBetween(min: 0, max: numNodes)
+    if rbt.insert(num) {
+        print("Inserted \(num)\t\(rbt.numberOfNodes)/\(numNodes) inserted.")
+    }
 }
 
-while !list.empty {
-    let valueToRemove = list.getDataAt(index: randomIntBetween(min: 0, max: (list.length - 1)))
-    if let dataRemoved = list.remove(dataToSearchFor: valueToRemove!) {
-        print("Removed \(dataRemoved) from the list. Now, the length is \(list.length).")
+var nodeCount: UInt = 0
+rbt.traverse(onNodeTouched: { _ in nodeCount += 1 } )
+assert(nodeCount == rbt.numberOfNodes)
+
+while rbt.numberOfNodes > numNodes / 2 {
+    if let removedNumber = rbt.remove(randomIntBetween(min: 0, max: numNodes)) {
+        var nodeCount: UInt = 0
+        rbt.traverse(onNodeTouched: { _ in nodeCount += 1 } )
+        print("Removed \(removedNumber)\tnodeCount: \(nodeCount)\tnumberOfNodes: \(rbt.numberOfNodes)")
+        assert(nodeCount == rbt.numberOfNodes)
     }
-    else {
-        print("Unable to remove \(valueToRemove)")
-    }
-    
-    //print("\t\(list)")
 }
