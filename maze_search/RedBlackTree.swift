@@ -19,18 +19,18 @@ enum RBT_Traversal_Type {
     case PostOrder
 }
 
-class RedBlackTree<T: Comparable>: CustomStringConvertible {
+class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStringConvertible {
     
     ////////////////////////////////////////////////////////
     // Public properties
     ////////////////////////////////////////////////////////
     
     var traversalType: RBT_Traversal_Type // Used by traverse() to determine how it should traverse the tree
-    var numberOfNodes: UInt { return numNodes }
+    var numberOfNodes: Int { return numNodes }
     var description: String {
         var returnVal = ""
         
-        traverse(onNodeTouched: { (contents: NodeContents<T>) -> () in
+        traverse(onNodeTouched: { (contents: Node<T>) -> () in
             returnVal += "\(contents)\n\n"
         })
         
@@ -47,7 +47,7 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     ////////////////////////////////////////////////////////
     
     private var root: Node<T>? = nil
-    private var numNodes: UInt = 0
+    private var numNodes = 0
     
     /**
      Creates a new Red Black Tree.
@@ -85,42 +85,43 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     private func insert(data: T, node nodeOp: Node<T>?, parent parentOp: Node<T>?, grandparent grandparentOp: Node<T>?) -> Bool {
         // If we have to keep going down the tree (i.e., if there is a node)
         if let node = nodeOp {
-            if data < node.data {
-                return insert(data: data, node: node.left, parent: node, grandparent: parentOp)
-            }
-            else if data > node.data {
-                return insert(data: data, node: node.right, parent: node, grandparent: parentOp)
-            }
-            else {
-                return false // data already exists in the tree
-            }
-        }
-        else {
-            let newNode: Node<T>
-            
-            // If we have have to add a node and it is NOT the root (i.e., if there is no node, but there is a parent)
-            if let parent = parentOp {
-                newNode = Node<T>(data: data)
-                
-                if data < parent.data {
-                    parent.left = newNode
+            if let nodeData = node.data {
+                if data < nodeData {
+                    return insert(data: data, node: node.left, parent: node, grandparent: parentOp)
+                }
+                else if data > nodeData {
+                    return insert(data: data, node: node.right, parent: node, grandparent: parentOp)
                 }
                 else {
-                    parent.right = newNode
+                    return false // data already exists in the tree
                 }
-                
-                newNode.parent = parent
             }
-                // Add data as the root (i.e., if there is no node or a parent node)
+        }
+        
+        let newNode: Node<T>
+        
+        // If we have have to add a node and it is NOT the root (i.e., if there is no node, but there is a parent)
+        if let parent = parentOp {
+            newNode = Node<T>(data: data)
+            
+            if data < parent.data! {
+                parent.left = newNode
+            }
             else {
-                newNode = Node<T>(data: data)
-                root = newNode
+                parent.right = newNode
             }
             
-            numNodes += 1
-            insertCase1(newNode)
-            return true
+            newNode.parent = parent
         }
+            // Add data as the root (i.e., if there is no node or a parent node)
+        else {
+            newNode = Node<T>(data: data)
+            root = newNode
+        }
+        
+        numNodes += 1
+        insertCase1(newNode)
+        return true
     }
     
     private func insertCase1(_ node: Node<T>) {
@@ -223,16 +224,20 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     
     private func remove(data: T, node nodeOp: Node<T>?) -> T? {
         if let node = nodeOp {
+            // If we reached a null node 
+            if node.data == nil {
+                return nil
+            }
             // If we have to go left
-            if data < node.data {
+            if data < node.data! {
                 return remove(data: data, node: node.left)
             }
             // If we have to go right
-            else if data > node.data {
+            else if data > node.data! {
                 return remove(data: data, node: node.right)
             }
             // If the node has TWO children
-            else if let _ = node.left, let _ = node.right {
+            else if node.hasLeftChild && node.hasRightChild {
                 if let predecessor = inOrderPredecessor(ofNode: node) {
                     swapNodeData(node1: node, node2: predecessor)
                     return remove(data: data, node: predecessor)
@@ -243,60 +248,83 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
                     return remove(data: data, node: successor)
                 }
             }
-            // If the node has NO children
-            else if node.left == nil && node.right == nil {
-                // If there is a parent node
-                if let parent = node.parent {
-                    if parent.left == node {
-                        parent.left = nil
-                        node.parent = nil
-                    }
-                    else {
-                        parent.right = nil
-                        node.parent = nil
-                    }
-                }
-                // If there is no parent node 
-                else {
-                    root = nil
+            // If the node has no more than one child
+            else {
+                
+                /*
+                    If M is a red node, we simply replace it with its child C, which must be black by property 4. (This can only
+                    occur when M has two leaf children, because if the red node M had a black non-leaf child on one side but just
+                    a leaf child on the other side, then the count of black nodes on both sides would be different, thus the tree
+                    would violate property 5.) All paths through the deleted node will simply pass through one fewer red node, and
+                    both the deleted node's parent and child must be black, so property 3 (all leaves are black) and property 4
+                    (both children of every red node are black) still hold.
+                */
+                
+                if node.color == .Red {
+                    print("Simple Case 1")
+                    let returnVal = node.data
+                    _ = deleteOneChild(node)
+                    return returnVal
                 }
                 
-                return node.data
-            }
-            // If the node has ONE child
-            else {
-                deleteOneChild(node)
-                return node.data
-            }
+                /*
+                    Another simple case is when M is black and C is red. Simply removing a black node could break Properties 4 
+                    (“Both children of every red node are black”) and 5 (“All paths from any given node to its leaf nodes contain 
+                    the same number of black nodes”), but if we repaint C black, both of these properties are preserved.
+                 */
+                else if color(of: node.left) == .Red || color(of: node.right) == .Red {
+                    print("Simple Case 2")
+                    let returnVal = node.data
+                    let child = deleteOneChild(node)
+                    
+                    child.color = .Black
+                    
+                    return returnVal
+                }
+                
+                /*
+                    The complex case is when both M and C are black. (This can only occur when deleting a black node which has two 
+                    leaf children, because if the black node M had a black non-leaf child on one side but just a leaf child on the 
+                    other side, then the count of black nodes on both sides would be different, thus the tree would have been an 
+                    invalid red–black tree by violation of property 5.) We begin by replacing M with its child C. We will relabel 
+                    this child C (in its new position) N, and its sibling (its new parent's other child) S. (S was previously the 
+                    sibling of M.) In the diagrams below, we will also use P for N's new parent (M's old parent), SL for S's left 
+                    child, and SR for S's right child (S cannot be a leaf because if M and C were black, then P's one subtree 
+                    which included M counted two black-height and thus P's other subtree which includes S must also count two 
+                    black-height, which cannot be the case if S is a leaf node).
+                */
+                else {
+                    print("Complex Case")
+                    let returnVal = node.data
+                    
+                    deleteCase1(node)
+                    
+                    // Nullify the node
+                    node.data = nil
+                    node.left = nil
+                    node.right = nil
+                    
+                    return returnVal
+                }
+                
+             }
         }
         else {
             return nil // node was not found
         }
     }
     
-    private func deleteOneChild(_ node: Node<T>) {
-        let child: Node<T>
-        
-        if let leftChild = node.left {
-            child = leftChild
-        }
-        else {
-            child = node.right!
-        }
-        
-        replaceNode(node: node, child: child)
-        
-        if node.color == .Black {
-            if child.color == .Red {
-                child.color = .Black
-            }
-            else {
-                deleteCase1(child)
-            }
-        }
-    }
-    
-    private func replaceNode(node: Node<T>, child: Node<T>) {
+    /*
+        Replaces a node with its child or not; _this includes nodes with __no__ children.
+     
+        - parameters:
+            - node: the node to replace
+     
+        - returns: the child node
+    */
+    private func deleteOneChild(_ node: Node<T>) -> Node<T> {
+        print("There is a child")
+        let child = node.hasLeftChild ? node.left! : node.right!
         if let parent = node.parent {
             if parent.left == node {
                 parent.left = child
@@ -304,21 +332,36 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
             else {
                 parent.right = child
             }
-            
-            child.parent = parent
         }
         else {
             root = child
         }
+        
+        child.parent = node.parent
+        
+        //child.left = Node<T>()
+        //child.right = Node<T>()
+        
+        if child.left == nil {
+            child.left = Node<T>()
+        }
+        
+        if child.right == nil {
+            child.right = Node<T>()
+        }
+        
+        return child
     }
     
     private func deleteCase1(_ node: Node<T>) {
+        print("Delete Case 1")
         if node.parent != nil {
             deleteCase2(node)
         }
     }
     
     private func deleteCase2(_ node: Node<T>) {
+        print("Delete Case 2")
         assert(node.parent != nil)
         
         let sib = sibling(ofNode: node)
@@ -339,6 +382,7 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     }
     
     private func deleteCase3(_ node: Node<T>) {
+        print("Delete Case 3")
         assert(node.parent != nil)
         
         let sib = sibling(ofNode: node)
@@ -355,6 +399,7 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     }
     
     private func deleteCase4(_ node: Node<T>) {
+        print("Delete Case 4")
         assert(node.parent != nil)
         
         let sib = sibling(ofNode: node)
@@ -371,6 +416,7 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     }
     
     private func deleteCase5(_ node: Node<T>) {
+        print("Delete Case 5")
         assert(node.parent != nil)
         assert(sibling(ofNode: node) != nil) // we need to be able to rotate on it
         
@@ -393,6 +439,7 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     }
     
     private func deleteCase6(_ node: Node<T>) {
+        print("Delete Case 6")
         assert(node.parent != nil)
         assert(sibling(ofNode: node) != nil)
         
@@ -413,30 +460,42 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     
     private func inOrderPredecessor(ofNode node: Node<T>) -> Node<T>? {
         
-        func inOrderPredecessorFinder(_ currentNode: Node<T>?) -> Node<T>? {
-            if let rightChild = currentNode?.right {
-                return inOrderPredecessorFinder(rightChild)
+        func inOrderPredecessorFinder(_ currentNode: Node<T>) -> Node<T>? {
+            if currentNode.hasRightChild {
+                return inOrderPredecessorFinder(currentNode.right!)
             }
             else {
+                assert(currentNode.parent != nil)
                 return currentNode
             }
         }
         
-        return inOrderPredecessorFinder(node.left)
+        if node.hasLeftChild {
+            return inOrderPredecessorFinder(node.left!)
+        }
+        else {
+            return nil
+        }
     }
     
     private func inOrderSuccessor(ofNode node: Node<T>) -> Node<T>? {
         
-        func inOrderSuccessorFinder(_ currentNode: Node<T>?) -> Node<T>? {
-            if let leftChild = currentNode?.left {
-                return inOrderSuccessorFinder(leftChild)
+        func inOrderSuccessorFinder(_ currentNode: Node<T>) -> Node<T>? {
+            if currentNode.hasLeftChild {
+                return inOrderSuccessorFinder(currentNode.left!)
             }
             else {
+                assert(currentNode.parent != nil)
                 return currentNode
             }
         }
         
-        return inOrderSuccessorFinder(node.right)
+        if node.hasRightChild {
+            return inOrderSuccessorFinder(node.right!)
+        }
+        else {
+            return nil
+        }
     }
     
     private func swapNodeData(node1: Node<T>, node2: Node<T>) {
@@ -489,18 +548,17 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     ////////////////////////////////////////////////////////
     
     private func rotateLeft(_ root: Node<T>) {
-        assert(root.right != nil)
-     
+        print("Rotate Left")
         let gp = root.parent
         let pivot = root.right!
-        let temp = pivot.left
+        let temp = pivot.left!
         
         pivot.left = root
         root.right = temp
         
         pivot.parent = gp
         root.parent = pivot
-        temp?.parent = root
+        temp.parent = root
         
         // Update the root if necessary
         if gp == nil {
@@ -519,18 +577,17 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     }
     
     private func rotateRight(_ root: Node<T>) {
-        assert(root.left != nil)
-        
+        print("Rotate Right")
         let gp = root.parent
         let pivot = root.left!
-        let temp = pivot.right
+        let temp = pivot.right!
         
         pivot.right = root
         root.left = temp
         
         pivot.parent = gp
         root.parent = pivot
-        temp?.parent = root
+        temp.parent = root
         
         // Update the root if necessary
         if gp == nil {
@@ -552,7 +609,7 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
     // Functions for traversals
     ////////////////////////////////////////////////////////
     
-    func traverse(onNodeTouched: (NodeContents<T>) -> ()) {
+    func traverse(onNodeTouched: (Node<T>) -> ()) {
         switch traversalType {
         case .InOrder:
             inOrderTraversal(root, onNodeTouched: onNodeTouched)
@@ -563,41 +620,95 @@ class RedBlackTree<T: Comparable>: CustomStringConvertible {
         }
     }
     
-    private func makeNodeContentsStruct(nodeToMakeItFrom node: Node<T>) -> NodeContents<T> {
-        return NodeContents<T>(nodeContents:        node.data,
-                               nodeColor:           node.color,
-                               leftChildContents:   node.left?.data,
-                               rightChildContents:  node.right?.data,
-                               parentContents:      node.parent?.data,
-                               description:         node.description)
-    }
+//    private func makeNodeContentsStruct(nodeToMakeItFrom node: Node<T>) -> NodeContents<T> {
+//        return NodeContents<T>(nodeContents:        node.data,
+//                               nodeColor:           node.color,
+//                               leftChildContents:   node.left?.data,
+//                               rightChildContents:  node.right?.data,
+//                               parentContents:      node.parent?.data,
+//                               description:         node.description)
+//    }
     
-    private func inOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (NodeContents<T>) -> ()) {
+    private func inOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (Node<T>) -> ()) {
         if let node = nodeOp {
-            inOrderTraversal(node.left, onNodeTouched: onNodeTouched)
-            onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
-            inOrderTraversal(node.right, onNodeTouched: onNodeTouched)
+            if node.data != nil {
+                inOrderTraversal(node.left, onNodeTouched: onNodeTouched)
+                //onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
+                onNodeTouched(node)
+                inOrderTraversal(node.right, onNodeTouched: onNodeTouched)
+            }
         }
     }
     
-    private func preOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (NodeContents<T>) -> ()) {
+    private func preOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (Node<T>) -> ()) {
         if let node = nodeOp {
-            onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
-            preOrderTraversal(node.left, onNodeTouched: onNodeTouched)
-            preOrderTraversal(node.right, onNodeTouched: onNodeTouched)
+            if node.data != nil {
+                //onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
+                onNodeTouched(node)
+                preOrderTraversal(node.left, onNodeTouched: onNodeTouched)
+                preOrderTraversal(node.right, onNodeTouched: onNodeTouched)
+            }
         }
     }
     
-    private func postOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (NodeContents<T>) -> ()) {
+    private func postOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (Node<T>) -> ()) {
         if let node = nodeOp {
-            postOrderTraversal(node.left, onNodeTouched: onNodeTouched)
-            postOrderTraversal(node.right, onNodeTouched: onNodeTouched)
-            onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
+            if node.data != nil {
+                postOrderTraversal(node.left, onNodeTouched: onNodeTouched)
+                postOrderTraversal(node.right, onNodeTouched: onNodeTouched)
+                //onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
+                onNodeTouched(node)
+            }
         }
     }
     
     private func color(of node: Node<T>?) -> RBT_Color {
         return node == nil ? .Black : node!.color
+    }
+    
+    func checkTree() {
+        if root != nil && !root!.isNullNode {
+            var numNodes = 0
+            var numNoParentNodes = 0
+            let queue = Queue<Int>()
+            
+            func checkTree(node: Node<T>, numberOfBlackNodes: Int) {
+                if node.isNullNode {
+                    assert(node.color == .Black) // check Property 3
+                    queue.enqueue(numberOfBlackNodes)
+                }
+                else {
+                    numNodes += 1
+                    
+                    if node.parent == nil {
+                        numNoParentNodes += 1
+                    }
+                    
+                    let numberOfBlackNodes = node.color == .Black ? numberOfBlackNodes + 1 : numberOfBlackNodes
+                    
+                    if node.color == .Red {
+                        assert(color(of: node.left) == .Black && color(of: node.right) == .Black) // assert Property 4
+                    }
+                    
+                    checkTree(node: node.left!, numberOfBlackNodes: numberOfBlackNodes)
+                    checkTree(node: node.right!, numberOfBlackNodes: numberOfBlackNodes)
+                }
+            }
+            
+            checkTree(node: root!, numberOfBlackNodes: 0)
+            
+            assert(root!.color == .Black) // checks Property 2
+            assert(numNodes == numberOfNodes) // ensures the tree is structured properly
+            assert(numNoParentNodes == 1) // ensures the tree is structured properly
+            
+            var headVal = queue.peek()
+            
+            while queue.length > 0 {
+                let dequeuedValue = queue.dequeue()!
+                assert(headVal == dequeuedValue) // checks Property 5
+                headVal = dequeuedValue
+            }
+        }
     }
 }
 
@@ -614,22 +725,46 @@ enum RBT_Color : CustomStringConvertible {
     }
 }
 
-private class Node<T: Comparable> : CustomStringConvertible, Equatable {
+public class Node<T> : CustomStringConvertible, Equatable where T: Comparable, T: CustomStringConvertible {
+    var data: T? = nil
     var left: Node<T>? = nil
     var right: Node<T>? = nil
     var parent: Node<T>? = nil
-    var color: RBT_Color = .Red
-    var data: T
-    var description: String {
+    
+    var isNullNode: Bool { return data == nil }
+    var hasLeftChild: Bool { return left != nil && left!.isNullNode == false }
+    var hasRightChild: Bool { return right != nil && right!.isNullNode == false }
+    var color: RBT_Color {
+        set {
+            rbtColor = (data == nil ? .Black : newValue)
+        }
+        get {
+            if data == nil {
+                rbtColor = .Black
+            }
+            
+            return rbtColor
+        }
+    }
+    public var description: String {
         let nodeDescription   = "  NODE: \(data) (\(color))"
-        let parentDescription = "PARENT: " + (parent == nil ? "nil" : "\(parent!.data)")
-        let leftDescription   = "  LEFT: " + (left == nil ? "nil" : "\(left!.data)")
-        let rightDescription  = " RIGHT: " + (right == nil ? "nil" : "\(right!.data)")
+        let parentDescription = "PARENT: " + (parent == nil ? "nil" : (parent!.data == nil ? "null node" : parent!.data!.description))
+        let leftDescription   = "  LEFT: " + (  left == nil ? "nil" : (  left!.data == nil ? "null node" :   left!.data!.description))
+        let rightDescription  = " RIGHT: " + ( right == nil ? "nil" : ( right!.data == nil ? "null node" :  right!.data!.description))
         return "\(nodeDescription)\n\(parentDescription)\n\(leftDescription)\n\(rightDescription)"
     }
     
+    private var rbtColor = RBT_Color.Black // set it to a value; may (and probably will) change in init
+    
     init(data: T) {
         self.data = data
+        self.color = .Red
+        self.left = Node<T>()
+        self.right = Node<T>()
+    }
+    
+    init() {
+        // Use default values
     }
     
     public static func ==(lhs: Node<T>, rhs: Node<T>) -> Bool {
@@ -637,15 +772,15 @@ private class Node<T: Comparable> : CustomStringConvertible, Equatable {
     }
 }
 
-struct NodeContents<T: Comparable> : CustomStringConvertible, Equatable {
-    var nodeContents: T
-    var nodeColor: RBT_Color
-    var leftChildContents: T?
-    var rightChildContents: T?
-    var parentContents: T?
-    var description: String 
-    
-    public static func ==(lhs: NodeContents<T>, rhs: NodeContents<T>) -> Bool {
-        return lhs.nodeContents == rhs.nodeContents
-    }
-}
+//struct NodeContents<T: Comparable> : CustomStringConvertible, Equatable {
+//    var nodeContents: T?
+//    var nodeColor: RBT_Color
+//    var leftChildContents: T?
+//    var rightChildContents: T?
+//    var parentContents: T?
+//    var description: String 
+//    
+//    public static func ==(lhs: NodeContents<T>, rhs: NodeContents<T>) -> Bool {
+//        return lhs.nodeContents == rhs.nodeContents
+//    }
+//}
