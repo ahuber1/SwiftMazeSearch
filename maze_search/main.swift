@@ -32,7 +32,7 @@ func randomIntBetween(min: Int, max: Int) -> Int {
 }
 
 let rbt = RedBlackTree<Int>(traversalType: .InOrder)
-let numNodes = 1_000
+let numNodes = 10_000
 let width = String(numNodes).characters.count
 
 while rbt.numberOfNodes < numNodes {
@@ -47,7 +47,7 @@ while rbt.numberOfNodes < numNodes {
 }
 
 while rbt.numberOfNodes > 0 {
-    print(rbt)
+    //print(rbt)
     let num = randomIntBetween(min: 0, max: numNodes)
     print("Attempting to remove \(num.format(withNumberOfDigits: width))...")
     
