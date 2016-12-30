@@ -8,18 +8,40 @@
 
 import Foundation
 
-
-func randomIntBetween(min: UInt, max: UInt) -> UInt {
-    return UInt(arc4random_uniform(UInt32(UInt(max - min + 1)))) + min
+extension Int {
+    enum Alignment {
+        case Left, Right
+    }
+    
+    func format(withNumberOfDigits digits: Int, alignedToThe alignment: Alignment) -> String {
+        if alignment == .Right {
+            return String(format: "%\(digits)d", self)
+        }
+        else {
+            return String(format: "%-\(digits)d", self)
+        }
+    }
+    
+    func format(withNumberOfDigits digits: Int) -> String {
+        return format(withNumberOfDigits: digits, alignedToThe: .Right)
+    }
 }
 
-let rbt = RedBlackTree<UInt>(traversalType: .InOrder)
-let numNodes: UInt = UInt(pow(Double(2), Double(10)))
+func randomIntBetween(min: Int, max: Int) -> Int {
+    return Int(arc4random_uniform(UInt32(max - min + 1))) + min
+}
+
+let rbt = RedBlackTree<Int>(traversalType: .InOrder)
+let numNodes = 10_000
+let width = String(numNodes).characters.count
 
 while rbt.numberOfNodes < numNodes {
     let num = randomIntBetween(min: 0, max: numNodes)
     if rbt.insert(num) {
-        print("Inserted \(num)\t\(rbt.numberOfNodes)/\(numNodes) inserted.")
+        print("Inserted \(num.format(withNumberOfDigits: width))",
+            "\t\(rbt.numberOfNodes.format(withNumberOfDigits: width))/\(numNodes.format(withNumberOfDigits: width, alignedToThe: .Left)) inserted.",
+            "\tChecking tree...")
+        rbt.checkTree()
     }
     
     var nodeCount: UInt = 0
@@ -28,10 +50,17 @@ while rbt.numberOfNodes < numNodes {
 }
 
 while rbt.numberOfNodes > 0 {
+<<<<<<< HEAD
     if let removedNumber = rbt.remove(randomIntBetween(min: 0, max: numNodes)) {
         var nodeCount: UInt = 0
         rbt.traverse(onNodeTouched: { _ in nodeCount += 1 } )
         print("Removed \(removedNumber)\tnodeCount: \(nodeCount)\tnumberOfNodes: \(rbt.numberOfNodes)")
         assert(nodeCount == rbt.numberOfNodes)
+=======
+    let num = randomIntBetween(min: 0, max: numNodes)
+    if let removedNumber = rbt.remove(num) {
+        print("Removed \(removedNumber.format(withNumberOfDigits: width))", "\trbt.numberOfNodes: \(rbt.numberOfNodes)\tChecking tree...")
+        rbt.checkTree()
+>>>>>>> fix_removal
     }
 }

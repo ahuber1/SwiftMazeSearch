@@ -7,8 +7,8 @@
 //
 
 class LinkedList<T: Equatable>: CustomStringConvertible {
-    private var head: Node<T>? = nil
-    private var tail: Node<T>? = nil
+    private var head: LinkedListNode<T>? = nil
+    private var tail: LinkedListNode<T>? = nil
     private var len: UInt = 0
     
     public var length: UInt { return len }
@@ -30,7 +30,7 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
     }
     
     func addToHead(_ data: T) {
-        let node = Node(data: data)
+        let node = LinkedListNode(data: data)
         
         if let h = head {
             node.next = h
@@ -46,7 +46,7 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
     }
     
     func addToTail(_ data: T) {
-        let node = Node(data: data)
+        let node = LinkedListNode(data: data)
         
         if let t = tail {
             node.prev = t
@@ -73,7 +73,7 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
         return __remove(nodeToRemove: getNode(data: data))
     }
     
-    private func __remove(nodeToRemove: Node<T>?) -> T? {
+    private func __remove(nodeToRemove: LinkedListNode<T>?) -> T? {
         if let node = nodeToRemove {
             if let prev = node.prev {
                 if let next = node.next {
@@ -114,7 +114,7 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
     }
     
     func getDataAt(index: UInt) -> T? {
-        var node: Node<T>? = head
+        var node: LinkedListNode<T>? = head
         var i: UInt = 0
         
         while node != nil && i < index {
@@ -131,8 +131,8 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
         return nil
     }
     
-    private func getNode(data: T) -> Node<T>? {
-        var node: Node<T>? = head
+    private func getNode(data: T) -> LinkedListNode<T>? {
+        var node: LinkedListNode<T>? = head
         
         while node != nil {
             if node!.data == data {
@@ -165,9 +165,9 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
     }
 }
 
-private class Node<T> {
-    var prev: Node<T>? = nil
-    var next: Node<T>? = nil
+private class LinkedListNode<T> {
+    var prev: LinkedListNode<T>? = nil
+    var next: LinkedListNode<T>? = nil
     var data: T
     
     init(data: T) {
