@@ -32,7 +32,7 @@ func randomIntBetween(min: Int, max: Int) -> Int {
 }
 
 let rbt = RedBlackTree<Int>(traversalType: .InOrder)
-let numNodes = 10_000
+let numNodes = 5_000
 let width = String(numNodes).characters.count
 
 while rbt.numberOfNodes < numNodes {
