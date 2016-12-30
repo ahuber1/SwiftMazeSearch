@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "maze_search/RedBlackTree.swift"
-            timestampString = "504759525.20893"
+            timestampString = "504760154.058185"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "546"
-            endingLineNumber = "546"
+            startingLineNumber = "530"
+            endingLineNumber = "530"
             landmarkName = "traverse(onNodeTouched:)"
             landmarkType = "7">
          </BreakpointContent>

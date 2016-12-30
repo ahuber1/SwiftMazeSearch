@@ -39,21 +39,16 @@ while rbt.numberOfNodes < numNodes {
     let num = randomIntBetween(min: 0, max: numNodes)
     if rbt.insert(num) {
         print("Inserted \(num.format(withNumberOfDigits: width))",
-            "\t\(rbt.numberOfNodes.format(withNumberOfDigits: width))/\(numNodes.format(withNumberOfDigits: width, alignedToThe: .Left)) inserted.")
-        //print(rbt)
-        print("Checking tree...")
+            "\t\(rbt.numberOfNodes.format(withNumberOfDigits: width))/\(numNodes.format(withNumberOfDigits: width, alignedToThe: .Left)) inserted.",
+            "\tChecking tree...")
         rbt.checkTree()
     }
 }
 
 while rbt.numberOfNodes > 0 {
-    //print(rbt)
     let num = randomIntBetween(min: 0, max: numNodes)
-    print("Attempting to remove \(num.format(withNumberOfDigits: width))...")
-    
     if let removedNumber = rbt.remove(num) {
-        print("Removed \(removedNumber.format(withNumberOfDigits: width))", "\trbt.numberOfNodes: \(rbt.numberOfNodes)")
-        print("Checking tree...")
+        print("Removed \(removedNumber.format(withNumberOfDigits: width))", "\trbt.numberOfNodes: \(rbt.numberOfNodes)\tChecking tree...")
         rbt.checkTree()
     }
 }

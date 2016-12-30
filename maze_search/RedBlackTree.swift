@@ -125,7 +125,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func insertCase1(_ node: Node<T>) {
-        print("Insert Case 1")
         if node.parent == nil {
             node.color = .Black
         }
@@ -135,7 +134,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func insertCase2(_ node: Node<T>) {
-        print("Insert Case 2")
         assert(node.parent != nil)
         
         if node.parent!.color == .Black {
@@ -147,7 +145,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func insertCase3(_ node: Node<T>) {
-        print("Insert Case 3")
         assert(node.parent != nil)
         
         // If unc exists AND its color is Red
@@ -164,7 +161,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func insertCase4(_ node: Node<T>) {
-        print("Insert Case 4")
         assert(node.parent != nil)
         assert(node.grandparent != nil)
         
@@ -183,7 +179,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func insertCase5(_ node: Node<T>) {
-        print("Insert Case 5")
         assert(node.parent != nil)
         assert(node.grandparent != nil)
         
@@ -251,18 +246,15 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
                 
                 if node.color == .Red {
                     // This can only occur when node has no children
-                    print("Case 1")
                     node.nullify()
                 }
                 // node.color must be black at this point
                 else if node.child.color == .Red {
-                    print("Case 2")
                     replaceNode(node: node, child: node.child)
                     node.child.color = .Black
                 }
                 else {
                     // The node is black and there are two leaf children
-                    print("Case 3")
                     replaceNode(node: node, child: node.child)
                     deleteCase1(node.child)
                 }
@@ -276,14 +268,12 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func deleteCase1(_ node: Node<T>) {
-        print("Delete Case 1")
         if node.parent != nil {
             deleteCase2(node)
         }
     }
     
     private func deleteCase2(_ node: Node<T>) {
-        print("Delete Case 2")
         let sibling = node.sibling!
         
         if sibling.color == .Red {
@@ -302,7 +292,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func deleteCase3(_ node: Node<T>) {
-        print("Delete Case 3")
         let sibling = node.sibling!
         
         if (node.parent!.color == .Black) &&
@@ -319,7 +308,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func deleteCase4(_ node: Node<T>) {
-        print("Delete Case 4")
         let sibling = node.sibling!
         
         if (node.parent!.color == .Red) &&
@@ -336,7 +324,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func deleteCase5(_ node: Node<T>) {
-        print("Delete Case 5")
         let sibling = node.sibling!
         
         if sibling.color == .Black {
@@ -363,7 +350,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func deleteCase6(_ node: Node<T>) {
-        print("Delete Case 6")
         let sibling = node.sibling!
         
         sibling.color = node.parent!.color
@@ -448,7 +434,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     ////////////////////////////////////////////////////////
     
     private func rotateLeft(_ root: Node<T>) {
-        //print("Rotate Left")
         let gp = root.parent
         let pivot = root.right!
         let temp = pivot.left!
@@ -490,7 +475,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
     
     private func rotateRight(_ root: Node<T>) {
-        //print("Rotate Right")
         let gp = root.parent
         let pivot = root.left!
         let temp = pivot.right!
