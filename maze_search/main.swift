@@ -44,23 +44,15 @@ while rbt.numberOfNodes < numNodes {
         rbt.checkTree()
     }
     
-    var nodeCount: UInt = 0
+    var nodeCount = 0
     rbt.traverse(onNodeTouched: { _ in nodeCount += 1 } )
     assert(nodeCount == rbt.numberOfNodes)
 }
 
 while rbt.numberOfNodes > 0 {
-<<<<<<< HEAD
-    if let removedNumber = rbt.remove(randomIntBetween(min: 0, max: numNodes)) {
-        var nodeCount: UInt = 0
-        rbt.traverse(onNodeTouched: { _ in nodeCount += 1 } )
-        print("Removed \(removedNumber)\tnodeCount: \(nodeCount)\tnumberOfNodes: \(rbt.numberOfNodes)")
-        assert(nodeCount == rbt.numberOfNodes)
-=======
     let num = randomIntBetween(min: 0, max: numNodes)
     if let removedNumber = rbt.remove(num) {
         print("Removed \(removedNumber.format(withNumberOfDigits: width))", "\trbt.numberOfNodes: \(rbt.numberOfNodes)\tChecking tree...")
         rbt.checkTree()
->>>>>>> fix_removal
     }
 }
