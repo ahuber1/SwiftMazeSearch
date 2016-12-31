@@ -6,13 +6,13 @@
 //  Copyright © 2016 Andrew Huber. All rights reserved.
 //
 
-class LinkedList<T: Equatable>: CustomStringConvertible {
+class LinkedList<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
     private var head: LinkedListNode<T>? = nil
     private var tail: LinkedListNode<T>? = nil
-    private var len: UInt = 0
+    private var numNodes = 0
     
-    public var length: UInt { return len }
-    public var empty: Bool { return len == 0 }
+    public var numberOfNodes: Int { return numNodes }
+    public var empty: Bool { return numNodes == 0 }
     public var description: String {
         var temp = "["
         var node = head
@@ -29,6 +29,24 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
         return temp
     }
     
+    init() {
+        // Use default values
+    }
+    
+    init(_ list: LinkedList<T>) {
+        for data in list {
+            addToTail(data)
+        }
+    }
+    
+    func makeIterator() -> LinkedListIterator<T> {
+        return LinkedListIterator<T>(startingNode: head)
+    }
+    
+    func makeReverseIterator() -> LinkedListIterator<T> {
+        return LinkedListIterator<T>(startingNode: tail)
+    }
+    
     func addToHead(_ data: T) {
         let node = LinkedListNode(data: data)
         
@@ -42,7 +60,7 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
             tail = node
         }
         
-        len += 1
+        numNodes += 1
     }
     
     func addToTail(_ data: T) {
@@ -58,7 +76,7 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
             tail = node
         }
         
-        len += 1
+        numNodes += 1
     }
     
     func removeHead() -> T? {
@@ -96,7 +114,7 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
                 }
             }
             
-            len -= 1
+            numNodes -= 1
             return node.data
         }
         else {
@@ -163,9 +181,61 @@ class LinkedList<T: Equatable>: CustomStringConvertible {
             return nil
         }
     }
+    
+    func map<U: Equatable>(_ mappingFunction: (T) -> U) -> LinkedList<U> {
+        let list = LinkedList<U>()
+        
+        for data in self {
+            list.addToTail(mappingFunction(data))
+        }
+        
+        return list
+    }
+    
+    public static func ==<T: Equatable>(left: LinkedList<T>, right: LinkedList<T>) -> Bool {
+        if left.numberOfNodes == right.numberOfNodes {
+            var leftIterator = left.makeIterator()
+            var rightIterator = right.makeIterator()
+            var leftValue = leftIterator.next()
+            var rightValue = rightIterator.next()
+            
+            while leftValue != nil && rightValue != nil {
+                if leftValue! != rightValue! {
+                    return false
+                }
+                
+                leftValue = leftIterator.next()
+                rightValue = rightIterator.next()
+            }
+            
+            return true
+        }
+        
+        return false
+    }
 }
 
-private class LinkedListNode<T> {
+struct LinkedListIterator<T: Equatable>: IteratorProtocol {
+    private var currentNode: LinkedListNode<T>? = nil
+    
+    init(startingNode: LinkedListNode<T>?) {
+        currentNode = startingNode
+    }
+    
+    mutating func next() -> T? {
+        let returnVal = currentNode?.data
+        currentNode = currentNode?.next
+        return returnVal
+    }
+    
+    mutating func previous() -> T? {
+        let returnVal = currentNode?.data
+        currentNode = currentNode?.prev
+        return returnVal
+    }
+}
+
+internal class LinkedListNode<T> {
     var prev: LinkedListNode<T>? = nil
     var next: LinkedListNode<T>? = nil
     var data: T

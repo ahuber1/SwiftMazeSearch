@@ -8,17 +8,6 @@
 
 import Foundation
 
-enum RBT_Traversal_Type {
-    /** In-Order traversal (left child, current node, right child) */
-    case InOrder
-    
-    /** Pre-Order traversal (current node, left child, right child) */
-    case PreOrder
-    
-    /** Post-Order traversal (left child, right child, current node) */
-    case PostOrder
-}
-
 class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStringConvertible {
     
     ////////////////////////////////////////////////////////
@@ -30,7 +19,7 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     var description: String {
         var returnVal = ""
         
-        traverse(onNodeTouched: { (contents: Node<T>) -> () in
+        traverse(onNodeTouched: { (contents: NodeContents<T>) -> () in
             returnVal += "\(contents)\n\n"
         })
         
@@ -96,31 +85,17 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
                     return false // data already exists in the tree
                 }
             }
-        }
-        
-        let newNode: Node<T>
-        
-        // If we have have to add a node and it is NOT the root (i.e., if there is no node, but there is a parent)
-        if let parent = parentOp {
-            newNode = Node<T>(data: data)
-            
-            if data < parent.data! {
-                parent.left = newNode
-            }
             else {
-                parent.right = newNode
+                node.unnullify(withThisStoredInTheNode: data, andThisAsItsParent: parentOp)
+                insertCase1(node)
             }
-            
-            newNode.parent = parent
         }
-            // Add data as the root (i.e., if there is no node or a parent node)
         else {
-            newNode = Node<T>(data: data)
-            root = newNode
+            root = Node<T>(data: data)
+            insertCase1(root!)
         }
         
         numNodes += 1
-        insertCase1(newNode)
         return true
     }
     
@@ -515,11 +490,34 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
         assert(temp.right != nil ? temp.right != temp.right!.right : true)
     }
     
+    func get(_ value: T) -> T? {
+        func get(_ node: Node<T>?, _ data: T) -> T? {
+            if node == nil || node!.isNullNode {
+                return nil
+            }
+            else if data < node!.data! {
+                return get(node!.left, data)
+            }
+            else if data > node!.data! {
+                return get(node!.right, data)
+            }
+            else {
+                return node!.data!
+            }
+        }
+        
+        return get(root, value)
+    }
+    
+    func contains(_ value: T) -> Bool {
+        return get(value) != nil
+    }
+    
     ////////////////////////////////////////////////////////
     // Functions for traversals
     ////////////////////////////////////////////////////////
     
-    func traverse(onNodeTouched: (Node<T>) -> ()) {
+    func traverse(onNodeTouched: (NodeContents<T>) -> ()) {
         switch traversalType {
         case .InOrder:
             inOrderTraversal(root, onNodeTouched: onNodeTouched)
@@ -530,44 +528,44 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
         }
     }
     
-    //    private func makeNodeContentsStruct(nodeToMakeItFrom node: Node<T>) -> NodeContents<T> {
-    //        return NodeContents<T>(nodeContents:        node.data,
-    //                               nodeColor:           node.color,
-    //                               leftChildContents:   node.left?.data,
-    //                               rightChildContents:  node.right?.data,
-    //                               parentContents:      node.parent?.data,
-    //                               description:         node.description)
-    //    }
+    private func makeNodeContentsStruct(nodeToMakeItFrom node: Node<T>) -> NodeContents<T> {
+        return NodeContents<T>(nodeContents:        node.data!,
+                               nodeColor:           node.color,
+                               leftChildContents:   node.left?.data,
+                               rightChildContents:  node.right?.data,
+                               parentContents:      node.parent?.data,
+                               description:         node.description)
+    }
     
-    private func inOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (Node<T>) -> ()) {
+    private func inOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (NodeContents<T>) -> ()) {
         if let node = nodeOp {
             if node.data != nil {
                 inOrderTraversal(node.left, onNodeTouched: onNodeTouched)
-                //onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
-                onNodeTouched(node)
+                onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
+                //onNodeTouched(node)
                 inOrderTraversal(node.right, onNodeTouched: onNodeTouched)
             }
         }
     }
     
-    private func preOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (Node<T>) -> ()) {
+    private func preOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (NodeContents<T>) -> ()) {
         if let node = nodeOp {
             if node.data != nil {
-                //onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
-                onNodeTouched(node)
+                onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
+                //onNodeTouched(node)
                 preOrderTraversal(node.left, onNodeTouched: onNodeTouched)
                 preOrderTraversal(node.right, onNodeTouched: onNodeTouched)
             }
         }
     }
     
-    private func postOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (Node<T>) -> ()) {
+    private func postOrderTraversal(_ nodeOp: Node<T>?, onNodeTouched: (NodeContents<T>) -> ()) {
         if let node = nodeOp {
             if node.data != nil {
                 postOrderTraversal(node.left, onNodeTouched: onNodeTouched)
                 postOrderTraversal(node.right, onNodeTouched: onNodeTouched)
-                //onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
-                onNodeTouched(node)
+                onNodeTouched(makeNodeContentsStruct(nodeToMakeItFrom: node))
+                //onNodeTouched(node)
             }
         }
     }
@@ -623,20 +621,7 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     }
 }
 
-enum RBT_Color : CustomStringConvertible {
-    case Red, Black
-    
-    var description: String {
-        switch self {
-        case .Red:
-            return "Red"
-        default:
-            return "Black"
-        }
-    }
-}
-
-public class Node<T> : CustomStringConvertible, Equatable where T: Comparable, T: CustomStringConvertible {
+private class Node<T> : CustomStringConvertible, Equatable where T: Comparable, T: CustomStringConvertible {
     var data: T? = nil
     var left: Node<T>? = nil
     var right: Node<T>? = nil
@@ -659,7 +644,7 @@ public class Node<T> : CustomStringConvertible, Equatable where T: Comparable, T
         }
     }
     public var description: String {
-        let nodeDescription   = "  NODE: \(data) (\(color))"
+        let nodeDescription   = "  NODE: \(data!) (\(color))"
         let parentDescription = "PARENT: " + (parent == nil ? "nil" : (parent!.data == nil ? "null node" : parent!.data!.description))
         let leftDescription   = "  LEFT: " + (  left == nil ? "nil" : (  left!.data == nil ? "null node" :   left!.data!.description))
         let rightDescription  = " RIGHT: " + ( right == nil ? "nil" : ( right!.data == nil ? "null node" :  right!.data!.description))
@@ -694,10 +679,7 @@ public class Node<T> : CustomStringConvertible, Equatable where T: Comparable, T
     private var rbtColor = RBT_Color.Black // set it to a value; may (and probably will) change in init
     
     init(data: T) {
-        self.data = data
-        self.color = .Red
-        self.left = Node<T>()
-        self.right = Node<T>()
+        unnullify(withThisStoredInTheNode: data, andThisAsItsParent: nil)
     }
     
     init() {
@@ -705,7 +687,7 @@ public class Node<T> : CustomStringConvertible, Equatable where T: Comparable, T
     }
     
     /**
-     Turns a node that is not a null node into a null node
+     Turns a node that is _not_ a null node into a null node
      */
     func nullify() {
         self.data = nil
@@ -713,20 +695,71 @@ public class Node<T> : CustomStringConvertible, Equatable where T: Comparable, T
         self.right = nil
     }
     
+    /**
+     Turns a node that_is_ a null node into a non-null node. 
+     _Also note that this changes the color of this node to red!_
+     
+     - parameters:
+        - data: the data to store in this node
+        - parent: this node's parent
+    */
+    func unnullify(withThisStoredInTheNode data: T, andThisAsItsParent parentOp: Node<T>?) {
+        self.data = data
+        self.color = .Red
+        self.left = Node<T>()
+        self.right = Node<T>()
+        self.parent = parentOp
+        
+        // If we have have to add a node and it is NOT the root (i.e., if there is no node, but there is a parent)
+        if let parent = parentOp {
+            
+            if data < parent.data! {
+                parent.left = self
+            }
+            else {
+                parent.right = self
+            }
+        }
+    }
+    
     public static func ==(lhs: Node<T>, rhs: Node<T>) -> Bool {
         return lhs.data == rhs.data
     }
 }
 
-//struct NodeContents<T: Comparable> : CustomStringConvertible, Equatable {
-//    var nodeContents: T?
-//    var nodeColor: RBT_Color
-//    var leftChildContents: T?
-//    var rightChildContents: T?
-//    var parentContents: T?
-//    var description: String
-//
-//    public static func ==(lhs: NodeContents<T>, rhs: NodeContents<T>) -> Bool {
-//        return lhs.nodeContents == rhs.nodeContents
-//    }
-//}
+struct NodeContents<T: Comparable> : CustomStringConvertible, Equatable {
+    var nodeContents: T
+    var nodeColor: RBT_Color
+    var leftChildContents: T?
+    var rightChildContents: T?
+    var parentContents: T?
+    var description: String
+
+    public static func ==(lhs: NodeContents<T>, rhs: NodeContents<T>) -> Bool {
+        return lhs.nodeContents == rhs.nodeContents
+    }
+}
+
+enum RBT_Color : CustomStringConvertible {
+    case Red, Black
+    
+    var description: String {
+        switch self {
+        case .Red:
+            return "Red"
+        default:
+            return "Black"
+        }
+    }
+}
+
+enum RBT_Traversal_Type {
+    /** In-Order traversal (left child, current node, right child) */
+    case InOrder
+    
+    /** Pre-Order traversal (current node, left child, right child) */
+    case PreOrder
+    
+    /** Post-Order traversal (left child, right child, current node) */
+    case PostOrder
+}

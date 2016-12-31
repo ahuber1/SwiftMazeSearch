@@ -8,11 +8,24 @@
 
 import Foundation
 
-class Queue<T: Equatable>: CustomStringConvertible {
-    let list = LinkedList<T>()
-    var length: UInt { return list.length }
+class Queue<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
+    let list: LinkedList<T>
+    
+    var length:Int { return list.numberOfNodes }
     var empty: Bool { return list.empty }
     var description: String { return list.description }
+    
+    convenience init() {
+        self.init(LinkedList<T>())
+    }
+    
+    init(_ queue: Queue<T>) {
+        list = LinkedList<T>(queue.list)
+    }
+    
+    private init(_ list: LinkedList<T>) {
+        self.list = list
+    }
     
     func enqueue(_ data: T) {
         list.addToTail(data)
@@ -24,5 +37,22 @@ class Queue<T: Equatable>: CustomStringConvertible {
     
     func peek() -> T? {
         return list.peekHead()
+    }
+    
+    func map<U: Equatable>(_ mappingFunction: (T) -> U) -> Queue<U> {
+        return Queue<U>(list.map(mappingFunction))
+    }
+    
+    func contains(_ element: T) -> Bool {
+        return list.contains(element)
+    }
+    
+    typealias QueueIterator = LinkedListIterator<T>
+    func makeIterator() -> QueueIterator {
+        return list.makeIterator()
+    }
+    
+    public static func==<T: Equatable>(left: Queue<T>, right: Queue<T>) -> Bool {
+        return left.list == right.list
     }
 }

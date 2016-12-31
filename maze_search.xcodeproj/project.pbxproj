@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E090B7331E162DC00096AB72 /* RedBlackDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E090B7321E162DC00096AB72 /* RedBlackDictionary.swift */; };
 		E0BFB76C1E010CA200A082D1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB76B1E010CA200A082D1 /* main.swift */; };
 		E0BFB7731E010CF700A082D1 /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB7721E010CF700A082D1 /* LinkedList.swift */; };
 		E0BFB7771E017CC500A082D1 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB7761E017CC500A082D1 /* Queue.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E090B7321E162DC00096AB72 /* RedBlackDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedBlackDictionary.swift; sourceTree = "<group>"; };
 		E0BFB7681E010CA200A082D1 /* maze_search */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = maze_search; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BFB76B1E010CA200A082D1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E0BFB7721E010CF700A082D1 /* LinkedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				E0BFB7761E017CC500A082D1 /* Queue.swift */,
 				E0BFB7781E017E4B00A082D1 /* Stack.swift */,
 				E0BFB77A1E017FDE00A082D1 /* RedBlackTree.swift */,
+				E090B7321E162DC00096AB72 /* RedBlackDictionary.swift */,
 			);
 			path = maze_search;
 			sourceTree = "<group>";
@@ -135,6 +138,7 @@
 				E0BFB7791E017E4B00A082D1 /* Stack.swift in Sources */,
 				E0BFB7731E010CF700A082D1 /* LinkedList.swift in Sources */,
 				E0BFB7771E017CC500A082D1 /* Queue.swift in Sources */,
+				E090B7331E162DC00096AB72 /* RedBlackDictionary.swift in Sources */,
 				E0BFB77B1E017FDE00A082D1 /* RedBlackTree.swift in Sources */,
 				E0BFB76C1E010CA200A082D1 /* main.swift in Sources */,
 			);
@@ -266,6 +270,7 @@
 				E0BFB7711E010CA200A082D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
