@@ -192,6 +192,12 @@ class LinkedList<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
         return list
     }
     
+    func removeAll() {
+        head = nil
+        tail = nil
+        numNodes = 0
+    }
+    
     public static func ==<T: Equatable>(left: LinkedList<T>, right: LinkedList<T>) -> Bool {
         if left.numberOfNodes == right.numberOfNodes {
             var leftIterator = left.makeIterator()

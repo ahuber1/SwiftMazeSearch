@@ -46,6 +46,10 @@ class Stack<T: Equatable>: CustomStringConvertible, Sequence, IteratorProtocol, 
         return list.contains(element)
     }
     
+    public func removeAll() {
+        list.removeAll()
+    }
+    
     public static func ==<T: Equatable>(left: Stack<T>, right: Stack<T>) -> Bool {
         return left.list == right.list
     }

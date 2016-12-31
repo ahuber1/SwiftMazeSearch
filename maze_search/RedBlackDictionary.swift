@@ -11,7 +11,7 @@ import Foundation
 class RedBlackDictionary<K, V>: CustomStringConvertible where K: Comparable, K: CustomStringConvertible, V: Equatable, V: CustomStringConvertible {
     public var description: String {
         var returnVal = ""
-        tree.traverse(onNodeTouched: { returnVal += "\($0.nodeContents.description)\n" } )
+        tree.traverse(traversalType: .InOrder, onNodeTouched: { returnVal += "\($0.nodeContents.description)\n" } )
         
         if returnVal == "" {
             return "Empty"
@@ -21,12 +21,10 @@ class RedBlackDictionary<K, V>: CustomStringConvertible where K: Comparable, K: 
         }
     }
     
-    private let tree = RedBlackTree<RedBlackDictionaryItem<K, V>>()
-    
     var keysAndValues: LinkedList<RedBlackDictionaryItem<K, V>> {
         let list = LinkedList<RedBlackDictionaryItem<K, V>>()
-
-        tree.traverse(onNodeTouched: { contents in
+        
+        tree.traverse(traversalType: .InOrder, onNodeTouched: { contents in
             list.addToTail(RedBlackDictionaryItem<K, V>(contents.nodeContents))
         })
         
@@ -35,6 +33,10 @@ class RedBlackDictionary<K, V>: CustomStringConvertible where K: Comparable, K: 
     
     var keys: LinkedList<K> { return keysAndValues.map( { return $0.key } ) }
     var values: LinkedList<V> { return keysAndValues.map( { return $0.value! } ) }
+    var numberOfKeyValuePairs: Int { return tree.numberOfNodes }
+    var isEmpty: Bool { return tree.numberOfNodes == 0 }
+    
+    private let tree = RedBlackTree<RedBlackDictionaryItem<K, V>>()
     
     /**
      Adds a new key-value pair, or changes the value of a pre-existing key-value pair with `newValue`
@@ -109,6 +111,12 @@ class RedBlackDictionary<K, V>: CustomStringConvertible where K: Comparable, K: 
             return nil
         }
     }
+    
+    func removeAll() {
+        tree.removeAll()
+    }
+    
+    
     
     subscript (key: K) -> V? {
         get {

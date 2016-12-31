@@ -14,12 +14,12 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     // Public properties
     ////////////////////////////////////////////////////////
     
-    var traversalType: RBT_Traversal_Type // Used by traverse() to determine how it should traverse the tree
+    var isEmpty: Bool { return numberOfNodes == 0 }
     var numberOfNodes: Int { return numNodes }
     var description: String {
         var returnVal = ""
         
-        traverse(onNodeTouched: { (contents: NodeContents<T>) -> () in
+        traverse(traversalType: .InOrder, onNodeTouched: { (contents: NodeContents<T>) -> () in
             returnVal += "\(contents)\n\n"
         })
         
@@ -37,25 +37,6 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     
     private var root: Node<T>? = nil
     private var numNodes = 0
-    
-    /**
-     Creates a new Red Black Tree.
-     
-     - parameters:
-     - traversalType: This is the type of traversal that is used when one gets a string representation of this Red Black Tree.
-     */
-    init(traversalType: RBT_Traversal_Type) {
-        self.traversalType = traversalType
-    }
-    
-    /**
-     Creates a new Red Black Tree with an in-order traversal (i.e., when one gets a string representation of this Red Black Tree,
-     an in-order traversal is used).
-     */
-    convenience init() {
-        self.init(traversalType: .InOrder)
-    }
-    
     
     /**
      
@@ -168,6 +149,10 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
         }
     }
     
+    func removeAll() {
+        root = nil
+        numNodes = 0
+    }
     
     /**
      
@@ -517,7 +502,7 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     // Functions for traversals
     ////////////////////////////////////////////////////////
     
-    func traverse(onNodeTouched: (NodeContents<T>) -> ()) {
+    func traverse(traversalType: TraversalType, onNodeTouched: (NodeContents<T>) -> ()) {
         switch traversalType {
         case .InOrder:
             inOrderTraversal(root, onNodeTouched: onNodeTouched)
@@ -753,7 +738,7 @@ enum RBT_Color : CustomStringConvertible {
     }
 }
 
-enum RBT_Traversal_Type {
+enum TraversalType {
     /** In-Order traversal (left child, current node, right child) */
     case InOrder
     

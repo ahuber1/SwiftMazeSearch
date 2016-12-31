@@ -47,6 +47,10 @@ class Queue<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
         return list.contains(element)
     }
     
+    func removeAll() {
+        list.removeAll()
+    }
+    
     typealias QueueIterator = LinkedListIterator<T>
     func makeIterator() -> QueueIterator {
         return list.makeIterator()
