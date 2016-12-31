@@ -6,7 +6,9 @@
 //  Copyright © 2016 Andrew Huber. All rights reserved.
 //
 
-class LinkedList<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
+
+
+public class LinkedList<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
     private var head: LinkedListNode<T>? = nil
     private var tail: LinkedListNode<T>? = nil
     private var numNodes = 0
@@ -39,7 +41,7 @@ class LinkedList<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
         }
     }
     
-    func makeIterator() -> LinkedListIterator<T> {
+    public func makeIterator() -> LinkedListIterator<T> {
         return LinkedListIterator<T>(startingNode: head)
     }
     
@@ -221,20 +223,20 @@ class LinkedList<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
     }
 }
 
-struct LinkedListIterator<T: Equatable>: IteratorProtocol {
+public struct LinkedListIterator<T: Equatable>: IteratorProtocol {
     private var currentNode: LinkedListNode<T>? = nil
     
     init(startingNode: LinkedListNode<T>?) {
         currentNode = startingNode
     }
     
-    mutating func next() -> T? {
+    public mutating func next() -> T? {
         let returnVal = currentNode?.data
         currentNode = currentNode?.next
         return returnVal
     }
     
-    mutating func previous() -> T? {
+    public mutating func previous() -> T? {
         let returnVal = currentNode?.data
         currentNode = currentNode?.prev
         return returnVal

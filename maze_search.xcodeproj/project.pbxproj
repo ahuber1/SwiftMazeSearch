@@ -3,16 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E090B7331E162DC00096AB72 /* RedBlackDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E090B7321E162DC00096AB72 /* RedBlackDictionary.swift */; };
+		E069F2F51E18786600709AC1 /* ADT_Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = E069F2EF1E18786600709AC1 /* ADT_Shared.swift */; };
+		E069F2F61E18786600709AC1 /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E069F2F01E18786600709AC1 /* LinkedList.swift */; };
+		E069F2F71E18786600709AC1 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E069F2F11E18786600709AC1 /* Queue.swift */; };
+		E069F2F81E18786600709AC1 /* RedBlackDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E069F2F21E18786600709AC1 /* RedBlackDictionary.swift */; };
+		E069F2F91E18786600709AC1 /* RedBlackTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = E069F2F31E18786600709AC1 /* RedBlackTree.swift */; };
+		E069F2FA1E18786600709AC1 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E069F2F41E18786600709AC1 /* Stack.swift */; };
+		E084C8E91E181825009279FC /* MazeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E084C8E81E181825009279FC /* MazeSearch.swift */; };
 		E0BFB76C1E010CA200A082D1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB76B1E010CA200A082D1 /* main.swift */; };
-		E0BFB7731E010CF700A082D1 /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB7721E010CF700A082D1 /* LinkedList.swift */; };
-		E0BFB7771E017CC500A082D1 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB7761E017CC500A082D1 /* Queue.swift */; };
-		E0BFB7791E017E4B00A082D1 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB7781E017E4B00A082D1 /* Stack.swift */; };
-		E0BFB77B1E017FDE00A082D1 /* RedBlackTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB77A1E017FDE00A082D1 /* RedBlackTree.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,13 +30,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E090B7321E162DC00096AB72 /* RedBlackDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedBlackDictionary.swift; sourceTree = "<group>"; };
+		E069F2EF1E18786600709AC1 /* ADT_Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ADT_Shared.swift; sourceTree = "<group>"; };
+		E069F2F01E18786600709AC1 /* LinkedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
+		E069F2F11E18786600709AC1 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
+		E069F2F21E18786600709AC1 /* RedBlackDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedBlackDictionary.swift; sourceTree = "<group>"; };
+		E069F2F31E18786600709AC1 /* RedBlackTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedBlackTree.swift; sourceTree = "<group>"; };
+		E069F2F41E18786600709AC1 /* Stack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		E084C8E81E181825009279FC /* MazeSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MazeSearch.swift; sourceTree = "<group>"; };
 		E0BFB7681E010CA200A082D1 /* maze_search */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = maze_search; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BFB76B1E010CA200A082D1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		E0BFB7721E010CF700A082D1 /* LinkedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
-		E0BFB7761E017CC500A082D1 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
-		E0BFB7781E017E4B00A082D1 /* Stack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
-		E0BFB77A1E017FDE00A082D1 /* RedBlackTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedBlackTree.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,11 +52,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E069F2EE1E18782400709AC1 /* Data Structures */ = {
+			isa = PBXGroup;
+			children = (
+				E069F2EF1E18786600709AC1 /* ADT_Shared.swift */,
+				E069F2F01E18786600709AC1 /* LinkedList.swift */,
+				E069F2F11E18786600709AC1 /* Queue.swift */,
+				E069F2F21E18786600709AC1 /* RedBlackDictionary.swift */,
+				E069F2F31E18786600709AC1 /* RedBlackTree.swift */,
+				E069F2F41E18786600709AC1 /* Stack.swift */,
+			);
+			name = "Data Structures";
+			path = maze_search;
+			sourceTree = "<group>";
+		};
 		E0BFB75F1E010CA200A082D1 = {
 			isa = PBXGroup;
 			children = (
-				E0BFB76A1E010CA200A082D1 /* maze_search */,
+				E0BFB76A1E010CA200A082D1 /* Maze Search */,
 				E0BFB7691E010CA200A082D1 /* Products */,
+				E069F2EE1E18782400709AC1 /* Data Structures */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,16 +83,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E0BFB76A1E010CA200A082D1 /* maze_search */ = {
+		E0BFB76A1E010CA200A082D1 /* Maze Search */ = {
 			isa = PBXGroup;
 			children = (
 				E0BFB76B1E010CA200A082D1 /* main.swift */,
-				E0BFB7721E010CF700A082D1 /* LinkedList.swift */,
-				E0BFB7761E017CC500A082D1 /* Queue.swift */,
-				E0BFB7781E017E4B00A082D1 /* Stack.swift */,
-				E0BFB77A1E017FDE00A082D1 /* RedBlackTree.swift */,
-				E090B7321E162DC00096AB72 /* RedBlackDictionary.swift */,
+				E084C8E81E181825009279FC /* MazeSearch.swift */,
 			);
+			name = "Maze Search";
 			path = maze_search;
 			sourceTree = "<group>";
 		};
@@ -114,7 +130,7 @@
 				};
 			};
 			buildConfigurationList = E0BFB7631E010CA200A082D1 /* Build configuration list for PBXProject "maze_search" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -135,11 +151,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E0BFB7791E017E4B00A082D1 /* Stack.swift in Sources */,
-				E0BFB7731E010CF700A082D1 /* LinkedList.swift in Sources */,
-				E0BFB7771E017CC500A082D1 /* Queue.swift in Sources */,
-				E090B7331E162DC00096AB72 /* RedBlackDictionary.swift in Sources */,
-				E0BFB77B1E017FDE00A082D1 /* RedBlackTree.swift in Sources */,
+				E069F2F71E18786600709AC1 /* Queue.swift in Sources */,
+				E069F2F91E18786600709AC1 /* RedBlackTree.swift in Sources */,
+				E084C8E91E181825009279FC /* MazeSearch.swift in Sources */,
+				E069F2F51E18786600709AC1 /* ADT_Shared.swift in Sources */,
+				E069F2FA1E18786600709AC1 /* Stack.swift in Sources */,
+				E069F2F81E18786600709AC1 /* RedBlackDictionary.swift in Sources */,
+				E069F2F61E18786600709AC1 /* LinkedList.swift in Sources */,
 				E0BFB76C1E010CA200A082D1 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -241,6 +259,11 @@
 		E0BFB7701E010CA200A082D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = 5NQCPY489K;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -249,6 +272,11 @@
 		E0BFB7711E010CA200A082D1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = 5NQCPY489K;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

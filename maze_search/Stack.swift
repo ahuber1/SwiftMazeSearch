@@ -8,14 +8,14 @@
 
 import Foundation
 
-class Stack<T: Equatable>: CustomStringConvertible, Sequence, IteratorProtocol, Equatable {
+public class Stack<T: Equatable>: CustomStringConvertible, Sequence, IteratorProtocol, Equatable {
     let list: LinkedList<T>
     
     var numberOfNodes: Int { return list.numberOfNodes }
     var empty: Bool { return list.empty }
-    var description: String { return list.description }
+    public var description: String { return list.description }
+    public typealias StackIterator = LinkedListIterator<T>
     
-    typealias StackIterator = LinkedListIterator<T>
     private var iterator: StackIterator? = nil
     
     convenience init() {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RedBlackDictionary<K, V>: CustomStringConvertible where K: Comparable, K: CustomStringConvertible, V: Equatable, V: CustomStringConvertible {
+public class RedBlackDictionary<K, V>: CustomStringConvertible where K: Comparable, K: CustomStringConvertible, V: Equatable, V: CustomStringConvertible {
     public var description: String {
         var returnVal = ""
         tree.traverse(traversalType: .InOrder, onNodeTouched: { returnVal += "\($0.nodeContents.description)\n" } )
@@ -137,7 +137,7 @@ class RedBlackDictionary<K, V>: CustomStringConvertible where K: Comparable, K: 
     }
 }
 
-class RedBlackDictionaryItem<K, V>: CustomStringConvertible, Comparable where K : Comparable, K : CustomStringConvertible, V: Equatable, V : CustomStringConvertible  {
+public class RedBlackDictionaryItem<K, V>: CustomStringConvertible, Comparable where K : Comparable, K : CustomStringConvertible, V: Equatable, V : CustomStringConvertible  {
     let key: K
     var value: V?
     

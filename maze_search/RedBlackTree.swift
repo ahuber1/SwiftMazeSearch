@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStringConvertible {
+public class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStringConvertible {
     
     ////////////////////////////////////////////////////////
     // Public properties
@@ -16,7 +16,7 @@ class RedBlackTree<T>: CustomStringConvertible where T: Comparable, T: CustomStr
     
     var isEmpty: Bool { return numberOfNodes == 0 }
     var numberOfNodes: Int { return numNodes }
-    var description: String {
+    public var description: String {
         var returnVal = ""
         
         traverse(traversalType: .InOrder, onNodeTouched: { (contents: NodeContents<T>) -> () in
@@ -712,23 +712,23 @@ private class Node<T> : CustomStringConvertible, Equatable where T: Comparable, 
     }
 }
 
-struct NodeContents<T: Comparable> : CustomStringConvertible, Equatable {
+public struct NodeContents<T: Comparable> : CustomStringConvertible, Equatable {
     var nodeContents: T
     var nodeColor: RBT_Color
     var leftChildContents: T?
     var rightChildContents: T?
     var parentContents: T?
-    var description: String
+    public var description: String
 
     public static func ==(lhs: NodeContents<T>, rhs: NodeContents<T>) -> Bool {
         return lhs.nodeContents == rhs.nodeContents
     }
 }
 
-enum RBT_Color : CustomStringConvertible {
+public enum RBT_Color : CustomStringConvertible {
     case Red, Black
     
-    var description: String {
+    public var description: String {
         switch self {
         case .Red:
             return "Red"
@@ -738,7 +738,7 @@ enum RBT_Color : CustomStringConvertible {
     }
 }
 
-enum TraversalType {
+public enum TraversalType {
     /** In-Order traversal (left child, current node, right child) */
     case InOrder
     

@@ -8,12 +8,12 @@
 
 import Foundation
 
-class Queue<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
+public class Queue<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
     let list: LinkedList<T>
     
     var length:Int { return list.numberOfNodes }
     var empty: Bool { return list.empty }
-    var description: String { return list.description }
+    public var description: String { return list.description }
     
     convenience init() {
         self.init(LinkedList<T>())
@@ -51,8 +51,8 @@ class Queue<T: Equatable>: CustomStringConvertible, Sequence, Equatable {
         list.removeAll()
     }
     
-    typealias QueueIterator = LinkedListIterator<T>
-    func makeIterator() -> QueueIterator {
+    public typealias QueueIterator = LinkedListIterator<T>
+    public func makeIterator() -> QueueIterator {
         return list.makeIterator()
     }
     
