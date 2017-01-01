@@ -31,3 +31,17 @@ extension Int {
 func randomIntBetween(min: Int, max: Int) -> Int {
     return Int(arc4random_uniform(UInt32(max - min + 1))) + min
 }
+
+func printPrompt(_ stuffToPrint: Any...) {
+    print(stuffToPrint, separator: " ", terminator: "")
+}
+
+printPrompt("Enter a file name: ")
+if let mazeFileName = readLine(strippingNewline: true) {
+    let searcher = try MazeSearcher(mazeFileName: mazeFileName)
+    if let path = try searcher.findPath(startingRow: 3, startingColumn: 4) {
+        for item in path {
+            print(item)
+        }
+    }
+}

@@ -13,7 +13,7 @@
 		E069F2F81E18786600709AC1 /* RedBlackDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E069F2F21E18786600709AC1 /* RedBlackDictionary.swift */; };
 		E069F2F91E18786600709AC1 /* RedBlackTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = E069F2F31E18786600709AC1 /* RedBlackTree.swift */; };
 		E069F2FA1E18786600709AC1 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E069F2F41E18786600709AC1 /* Stack.swift */; };
-		E084C8E91E181825009279FC /* MazeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E084C8E81E181825009279FC /* MazeSearch.swift */; };
+		E084C8E91E181825009279FC /* MazeSearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E084C8E81E181825009279FC /* MazeSearcher.swift */; };
 		E0BFB76C1E010CA200A082D1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB76B1E010CA200A082D1 /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +36,11 @@
 		E069F2F21E18786600709AC1 /* RedBlackDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedBlackDictionary.swift; sourceTree = "<group>"; };
 		E069F2F31E18786600709AC1 /* RedBlackTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedBlackTree.swift; sourceTree = "<group>"; };
 		E069F2F41E18786600709AC1 /* Stack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
-		E084C8E81E181825009279FC /* MazeSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MazeSearch.swift; sourceTree = "<group>"; };
+		E069F2FC1E18C27700709AC1 /* mazeA.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = mazeA.txt; sourceTree = "<group>"; };
+		E069F2FD1E18C27700709AC1 /* mazeB.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = mazeB.txt; sourceTree = "<group>"; };
+		E069F2FE1E18C27700709AC1 /* mazeC.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = mazeC.txt; sourceTree = "<group>"; };
+		E069F2FF1E18C27700709AC1 /* mazeD.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = mazeD.txt; sourceTree = "<group>"; };
+		E084C8E81E181825009279FC /* MazeSearcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MazeSearcher.swift; sourceTree = "<group>"; };
 		E0BFB7681E010CA200A082D1 /* maze_search */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = maze_search; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BFB76B1E010CA200A082D1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -66,12 +70,24 @@
 			path = maze_search;
 			sourceTree = "<group>";
 		};
+		E069F2FB1E18C26800709AC1 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				E069F2FC1E18C27700709AC1 /* mazeA.txt */,
+				E069F2FD1E18C27700709AC1 /* mazeB.txt */,
+				E069F2FE1E18C27700709AC1 /* mazeC.txt */,
+				E069F2FF1E18C27700709AC1 /* mazeD.txt */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
 		E0BFB75F1E010CA200A082D1 = {
 			isa = PBXGroup;
 			children = (
+				E069F2FB1E18C26800709AC1 /* Assets */,
 				E0BFB76A1E010CA200A082D1 /* Maze Search */,
-				E0BFB7691E010CA200A082D1 /* Products */,
 				E069F2EE1E18782400709AC1 /* Data Structures */,
+				E0BFB7691E010CA200A082D1 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -87,7 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				E0BFB76B1E010CA200A082D1 /* main.swift */,
-				E084C8E81E181825009279FC /* MazeSearch.swift */,
+				E084C8E81E181825009279FC /* MazeSearcher.swift */,
 			);
 			name = "Maze Search";
 			path = maze_search;
@@ -153,7 +169,7 @@
 			files = (
 				E069F2F71E18786600709AC1 /* Queue.swift in Sources */,
 				E069F2F91E18786600709AC1 /* RedBlackTree.swift in Sources */,
-				E084C8E91E181825009279FC /* MazeSearch.swift in Sources */,
+				E084C8E91E181825009279FC /* MazeSearcher.swift in Sources */,
 				E069F2F51E18786600709AC1 /* ADT_Shared.swift in Sources */,
 				E069F2FA1E18786600709AC1 /* Stack.swift in Sources */,
 				E069F2F81E18786600709AC1 /* RedBlackDictionary.swift in Sources */,
