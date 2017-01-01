@@ -422,7 +422,7 @@ public class LinkedList<T: Equatable>: CustomStringConvertible, Sequence, Equata
                 rightValue = rightIterator.next()
             }
             
-            return true
+            return leftValue == nil && rightValue == nil // return true only if we have iterated through BOTH lists COMPLETELY
         }
         
         return false
