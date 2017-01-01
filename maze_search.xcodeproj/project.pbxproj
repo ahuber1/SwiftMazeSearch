@@ -60,7 +60,7 @@
 			children = (
 				E0E65F881E18D129009AF259 /* maze_files */,
 				E0E65F811E18D117009AF259 /* data_structures */,
-				E0BFB76A1E010CA200A082D1 /* Maze Search */,
+				E0BFB76A1E010CA200A082D1 /* maze_search */,
 				E0BFB7691E010CA200A082D1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,13 +73,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E0BFB76A1E010CA200A082D1 /* Maze Search */ = {
+		E0BFB76A1E010CA200A082D1 /* maze_search */ = {
 			isa = PBXGroup;
 			children = (
 				E0BFB76B1E010CA200A082D1 /* main.swift */,
 				E084C8E81E181825009279FC /* MazeSearcher.swift */,
 			);
-			name = "Maze Search";
 			path = maze_search;
 			sourceTree = "<group>";
 		};
